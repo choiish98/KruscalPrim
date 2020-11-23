@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 원 노드 id
+        //원 노드 id
         Integer[] rIdViews = {
                 R.id.imageView1, R.id.imageView2, R.id.imageView3, R.id.imageView4,
                 R.id.imageView5, R.id.imageView6, R.id.imageView7, R.id.imageView8,
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         };
         lineView = new ImageView[14];
         for(int i = 0; i < lineView.length; i++){
-            lineView[i] = (ImageView)findViewById(rIdViews[i]);
+            lineView[i] = (ImageView)findViewById(rIdViews2[i]);
         }
 
         // 나머지 id 정리
@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
             Paint textPaint = new Paint();
             textPaint.setColor(Color.WHITE);
             textPaint.setTextSize(100);
-
             Bitmap bitmap = Bitmap.createBitmap(myView.getWidth(), myView.getHeight(), Bitmap.Config.ARGB_8888);
 
             Canvas canvas = new Canvas(bitmap);
