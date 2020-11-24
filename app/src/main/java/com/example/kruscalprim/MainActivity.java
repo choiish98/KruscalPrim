@@ -107,12 +107,12 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     // node sort
-                    for(int i = 1; i < j; i ++){
+                    for(int i = 1; i < j; i++){
                         for(int k = 1; k < j; k++){
-                            if(node[i].weight > node[k].weight){
-                                change(node[i].start, node[k].start);
-                                change(node[i].stop, node[k].stop);
-                                change(node[i].weight, node[k].weight);
+                            if(node[i].weight < node[k].weight){
+                                int temp1 = node[i].start; node[i].start = node[k].start; node[k].start = temp1;
+                                int temp2 = node[i].stop; node[i].stop = node[k].stop; node[k].stop = temp2;
+                                int temp3 = node[i].weight; node[i].weight = node[k].weight; node[k].weight = temp3;
                             }
                         }
                     }
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
                             Canvas canvas = new Canvas(bitmap);
                             canvas.drawLine(x[node[i].start], y[node[i].start], x[node[i].stop], y[node[i].stop], linePaint);
-                            canvas.drawText(String.valueOf(weight), (x[node[i].start] + x[node[i].stop]) / 2, (y[node[i].start] + y[node[i].stop]) / 2, textPaint);
+                            canvas.drawText(String.valueOf(node[i].weight), (x[node[i].start] + x[node[i].stop]) / 2, (y[node[i].start] + y[node[i].stop]) / 2, textPaint);
                             lineView[o].setImageBitmap(bitmap);
                             lineView[o].setVisibility(View.VISIBLE);
                             o++;
@@ -202,13 +202,6 @@ public class MainActivity extends AppCompatActivity {
 
         node[j] = new Node(start, stop, weight);
         j++;
-    }
-
-    // buble change
-    public void change(int a, int b) {
-        int temp = a;
-        a = b;
-        b = temp;
     }
 
     // 부모 노드를 찾는 함수
