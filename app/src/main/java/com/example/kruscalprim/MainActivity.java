@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private int j = 1; // 간선 숫자
     private int start, stop, weight;
     private EditText editText, editText2, editText3;
+    private Node node[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.editTextNumber);     // 출발점
         editText2 = findViewById(R.id.editTextNumber2);     // 도착점
         editText3 = findViewById(R.id.editTextNumber3);   // 가중치
+        node = new Node[20];
 
         Button button = findViewById(R.id.button);     // 입력
         x = new float[14];
@@ -72,25 +74,54 @@ public class MainActivity extends AppCompatActivity {
         myView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                drawCircle(event);
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    drawCircle(event);
                 return true;
             }
         });
-        // 입력 버튼 클릭 시
+
+        // 버튼 클릭 시
         button.setOnClickListener(onClickListener);
+        findViewById(R.id.interResultBtn).setOnClickListener(onClickListener);
     }
 
     // 버튼 클릭 함수
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch(v.getId()){
-                case(R.id.button):
+            switch(v.getId()) {
+                case (R.id.button):
                     start = Integer.parseInt(editText.getText().toString());
-                    stop = Integer.parseInt(editText2.getText().toString()) * 2;
+                    stop = Integer.parseInt(editText2.getText().toString());
                     weight = Integer.parseInt(editText3.getText().toString());
 
                     drawLine();
+                    break;
+                case (R.id.interResultBtn):
+                    // node sort
+                    for(int i = 1; i < j; i ++){
+                        for(int k = 1; k < j; k++){
+                            if(node[i].weight > node[k].weight){
+                                change(node[i].start, node[k].start);
+                                change(node[i].stop, node[k].stop);
+                                change(node[i].weight, node[k].weight);
+                            }
+                        }
+                    }
+
+                    // circleView & lineView Gone
+                    for(int i = 0; i < circleView.length; i ++) {
+                        circleView[i].setVisibility(View.GONE);
+                    }
+                    for(int i = 0; i < lineView.length; i ++){
+                        lineView[i].setVisibility(View.GONE);
+                    }
+
+                    // print kruskal algorithms
+                    for(int i = 1; i < j; i++) {
+                        if(true) {
+                        }
+                    }
                     break;
             }
         }
@@ -98,29 +129,23 @@ public class MainActivity extends AppCompatActivity {
 
     // 원 그리는 함수
     public void drawCircle(MotionEvent event) {
-        if(i < 14) {
-            x[i] = event.getX();
-            y[i] = event.getY();
+        x[i] = event.getX();
+        y[i] = event.getY();
 
-            Paint circlePaint = new Paint();
-            circlePaint.setStyle(Paint.Style.FILL);
-            circlePaint.setColor(Color.RED);
+        Paint circlePaint = new Paint();
+        circlePaint.setStyle(Paint.Style.FILL);
+        circlePaint.setColor(Color.RED);
 
-            Paint textPaint = new Paint();
-            textPaint.setColor(Color.WHITE);
-            textPaint.setTextSize(100);
-            Bitmap bitmap = Bitmap.createBitmap(myView.getWidth(), myView.getHeight(), Bitmap.Config.ARGB_8888);
+        Paint textPaint = new Paint();
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextSize(100);
+        Bitmap bitmap = Bitmap.createBitmap(myView.getWidth(), myView.getHeight(), Bitmap.Config.ARGB_8888);
 
-            Canvas canvas = new Canvas(bitmap);
-            canvas.drawCircle(x[i], y[i], 100, circlePaint);
-            if(i < 13) {
-                canvas.drawText(String.valueOf(i / 2), x[i] - 28, y[i] + 40, textPaint);
-            } else {
-                canvas.drawText(String.valueOf(7), x[i] - 28, y[i] + 40, textPaint);
-            }
-            circleView[i].setImageBitmap(bitmap);
-            i++;
-        }
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawCircle(x[i], y[i], 100, circlePaint);
+        canvas.drawText(String.valueOf(i), x[i] - 28, y[i] + 40, textPaint);
+        circleView[i].setImageBitmap(bitmap);
+        i++;
     }
 
     // 간선 그리는 함수
@@ -137,10 +162,18 @@ public class MainActivity extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(myView.getWidth(), myView.getHeight(), Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);
-        Log.e("log", "x: " + x[start]);
         canvas.drawLine(x[start], y[start], x[stop], y[stop], linePaint);
         canvas.drawText(String.valueOf(weight), (x[start] + x[stop]) / 2, (y[start] + y[stop]) / 2, textPaint);
         lineView[j].setImageBitmap(bitmap);
+
+        node[j] = new Node(start, stop, weight);
         j++;
+    }
+
+    // buble change
+    public void change(int a, int b) {
+        int temp = a;
+        a = b;
+        b = temp;
     }
 }
