@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(onClickListener);
         findViewById(R.id.interResultBtn).setOnClickListener(onClickListener);
         findViewById(R.id.finalResultBtn).setOnClickListener(onClickListener);
+        findViewById(R.id.primInterResultBtn).setOnClickListener(onClickListener);
+        findViewById(R.id.primFinalResultBtn).setOnClickListener(onClickListener);
     }
 
     // 버튼 클릭 함수
@@ -106,6 +108,12 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case (R.id.finalResultBtn):
                     result(R.id.finalResultBtn);
+                    break;
+                case (R.id.primInterResultBtn):
+                    //result(R.id.finalResultBtn);
+                    break;
+                case (R.id.primFinalResultBtn):
+
                     break;
             }
         }
