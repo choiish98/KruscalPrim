@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private View myView;
     private int i = 1; // 노드 숫자
     private int j = 1; // 간선 숫자
+    private int o = 1; // 간선 그리기 숫자
     private int start, stop, weight;
     private EditText editText, editText2, editText3;
     private Node node[];
@@ -126,10 +127,33 @@ public class MainActivity extends AppCompatActivity {
 
                     // print kruskal algorithms
                     for(int i = 1; i < j; i++) {
+                        // 싸이클이 아닐 때
                         if(!findParent(parent, node[i].start, node[i].stop)) {
+                            // 부모를 합침
                             unionParent(parent, node[i].start, node[i].stop);
+
+                            // 노드 출력
                             circleView[node[i].start].setVisibility(View.VISIBLE);
                             circleView[node[i].stop].setVisibility(View.VISIBLE);
+
+                            // 간선 출력
+                            Paint linePaint = new Paint();
+                            linePaint.getStrokeWidth();
+                            linePaint.setColor(Color.BLACK);
+                            linePaint.setStrokeWidth(5f);
+
+                            Paint textPaint = new Paint();
+                            textPaint.setColor(Color.BLACK);
+                            textPaint.setTextSize(50);
+
+                            Bitmap bitmap = Bitmap.createBitmap(myView.getWidth(), myView.getHeight(), Bitmap.Config.ARGB_8888);
+
+                            Canvas canvas = new Canvas(bitmap);
+                            canvas.drawLine(x[node[i].start], y[node[i].start], x[node[i].stop], y[node[i].stop], linePaint);
+                            canvas.drawText(String.valueOf(weight), (x[node[i].start] + x[node[i].stop]) / 2, (y[node[i].start] + y[node[i].stop]) / 2, textPaint);
+                            lineView[o].setImageBitmap(bitmap);
+                            lineView[o].setVisibility(View.VISIBLE);
+                            o++;
                         }
                     }
                     break;
