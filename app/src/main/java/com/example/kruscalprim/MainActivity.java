@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private int start, stop, weight;
     private EditText editText, editText2, editText3;
     private Node node[];
+    private int parent[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         editText2 = findViewById(R.id.editTextNumber2);     // 도착점
         editText3 = findViewById(R.id.editTextNumber3);   // 가중치
         node = new Node[20];
+        parent = new int[20];
 
         Button button = findViewById(R.id.button);     // 입력
         x = new float[14];
@@ -98,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
                     drawLine();
                     break;
                 case (R.id.interResultBtn):
+                    // 부모 노드 초기화
+                    for(int k = 0; k < i; k++) {
+                        parent[k] = k;
+                    }
+
                     // node sort
                     for(int i = 1; i < j; i ++){
                         for(int k = 1; k < j; k++){
@@ -119,7 +126,10 @@ public class MainActivity extends AppCompatActivity {
 
                     // print kruskal algorithms
                     for(int i = 1; i < j; i++) {
-                        if(true) {
+                        if(!findParent(parent, node[i].start, node[i].stop)) {
+                            unionParent(parent, node[i].start, node[i].stop);
+                            circleView[node[i].start].setVisibility(View.VISIBLE);
+                            circleView[node[i].stop].setVisibility(View.VISIBLE);
                         }
                     }
                     break;
@@ -175,5 +185,27 @@ public class MainActivity extends AppCompatActivity {
         int temp = a;
         a = b;
         b = temp;
+    }
+
+    // 부모 노드를 찾는 함수
+    int getParent(int parent[], int x) {
+        if(parent[x] == x) return x;
+        return parent[x] = getParent(parent, parent[x]);
+    }
+
+    // 부모 합치기
+    void unionParent(int parent[], int a, int b) {
+        a = getParent(parent, a);
+        b = getParent(parent, b);
+        if(a < b) parent[b] = a;
+        else parent[a] = b;
+    }
+
+    // 같은 부모를 가지는지 확인
+    boolean findParent(int parent[], int a, int b) {
+        a = getParent(parent, a);
+        b = getParent(parent, b);
+        if(a == b) return true;
+        return false;
     }
 }
