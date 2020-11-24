@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         // 버튼 클릭 시
         button.setOnClickListener(onClickListener);
         findViewById(R.id.interResultBtn).setOnClickListener(onClickListener);
+        findViewById(R.id.finalResultBtn).setOnClickListener(onClickListener);
     }
 
     // 버튼 클릭 함수
@@ -101,61 +102,10 @@ public class MainActivity extends AppCompatActivity {
                     drawLine();
                     break;
                 case (R.id.interResultBtn):
-                    // 부모 노드 초기화
-                    for(int k = 0; k < i; k++) {
-                        parent[k] = k;
-                    }
-
-                    // node sort
-                    for(int i = 1; i < j; i++){
-                        for(int k = 1; k < j; k++){
-                            if(node[i].weight < node[k].weight){
-                                int temp1 = node[i].start; node[i].start = node[k].start; node[k].start = temp1;
-                                int temp2 = node[i].stop; node[i].stop = node[k].stop; node[k].stop = temp2;
-                                int temp3 = node[i].weight; node[i].weight = node[k].weight; node[k].weight = temp3;
-                            }
-                        }
-                    }
-
-                    // circleView & lineView Gone
-                    for(int i = 0; i < circleView.length; i ++) {
-                        circleView[i].setVisibility(View.GONE);
-                    }
-                    for(int i = 0; i < lineView.length; i ++){
-                        lineView[i].setVisibility(View.GONE);
-                    }
-
-                    // print kruskal algorithms
-                    for(int i = 1; i < j; i++) {
-                        // 싸이클이 아닐 때
-                        if(!findParent(parent, node[i].start, node[i].stop)) {
-                            // 부모를 합침
-                            unionParent(parent, node[i].start, node[i].stop);
-
-                            // 노드 출력
-                            circleView[node[i].start].setVisibility(View.VISIBLE);
-                            circleView[node[i].stop].setVisibility(View.VISIBLE);
-
-                            // 간선 출력
-                            Paint linePaint = new Paint();
-                            linePaint.getStrokeWidth();
-                            linePaint.setColor(Color.BLACK);
-                            linePaint.setStrokeWidth(5f);
-
-                            Paint textPaint = new Paint();
-                            textPaint.setColor(Color.BLACK);
-                            textPaint.setTextSize(50);
-
-                            Bitmap bitmap = Bitmap.createBitmap(myView.getWidth(), myView.getHeight(), Bitmap.Config.ARGB_8888);
-
-                            Canvas canvas = new Canvas(bitmap);
-                            canvas.drawLine(x[node[i].start], y[node[i].start], x[node[i].stop], y[node[i].stop], linePaint);
-                            canvas.drawText(String.valueOf(node[i].weight), (x[node[i].start] + x[node[i].stop]) / 2, (y[node[i].start] + y[node[i].stop]) / 2, textPaint);
-                            lineView[o].setImageBitmap(bitmap);
-                            lineView[o].setVisibility(View.VISIBLE);
-                            o++;
-                        }
-                    }
+                    result(R.id.interResultBtn);
+                    break;
+                case (R.id.finalResultBtn):
+                    result(R.id.finalResultBtn);
                     break;
             }
         }
@@ -202,6 +152,71 @@ public class MainActivity extends AppCompatActivity {
 
         node[j] = new Node(start, stop, weight);
         j++;
+    }
+
+    // 중간 결과
+    void result(int buttonName) {
+        // 부모 노드 초기화
+        for(int k = 0; k < i; k++) {
+            parent[k] = k;
+        }
+
+        // node sort
+        for(int i = 1; i < j; i++){
+            for(int k = 1; k < j; k++){
+                if(node[i].weight < node[k].weight){
+                    int temp1 = node[i].start; node[i].start = node[k].start; node[k].start = temp1;
+                    int temp2 = node[i].stop; node[i].stop = node[k].stop; node[k].stop = temp2;
+                    int temp3 = node[i].weight; node[i].weight = node[k].weight; node[k].weight = temp3;
+                }
+            }
+        }
+
+        // circleView & lineView Gone
+        for(int i = 0; i < circleView.length; i ++) {
+            circleView[i].setVisibility(View.GONE);
+        }
+        for(int i = 0; i < lineView.length; i ++){
+            lineView[i].setVisibility(View.GONE);
+        }
+
+        // print kruskal algorithms
+        int kkagy;
+        if(buttonName == R.id.interResultBtn){
+            kkagy = j/2;
+        } else {
+            kkagy = j;
+        }
+        for(int i = 1; i < kkagy; i++) {
+            // 싸이클이 아닐 때
+            if(!findParent(parent, node[i].start, node[i].stop)) {
+                // 부모를 합침
+                unionParent(parent, node[i].start, node[i].stop);
+
+                // 노드 출력
+                circleView[node[i].start].setVisibility(View.VISIBLE);
+                circleView[node[i].stop].setVisibility(View.VISIBLE);
+
+                // 간선 출력
+                Paint linePaint = new Paint();
+                linePaint.getStrokeWidth();
+                linePaint.setColor(Color.BLACK);
+                linePaint.setStrokeWidth(5f);
+
+                Paint textPaint = new Paint();
+                textPaint.setColor(Color.BLACK);
+                textPaint.setTextSize(50);
+
+                Bitmap bitmap = Bitmap.createBitmap(myView.getWidth(), myView.getHeight(), Bitmap.Config.ARGB_8888);
+
+                Canvas canvas = new Canvas(bitmap);
+                canvas.drawLine(x[node[i].start], y[node[i].start], x[node[i].stop], y[node[i].stop], linePaint);
+                canvas.drawText(String.valueOf(node[i].weight), (x[node[i].start] + x[node[i].stop]) / 2, (y[node[i].start] + y[node[i].stop]) / 2, textPaint);
+                lineView[o].setImageBitmap(bitmap);
+                lineView[o].setVisibility(View.VISIBLE);
+                o++;
+            }
+        }
     }
 
     // 부모 노드를 찾는 함수
